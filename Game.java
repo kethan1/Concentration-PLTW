@@ -1,11 +1,12 @@
-/** 
+
+/**
  * The game that uses a n x m board of tiles or cards.
- *  
+ *
  * Player chooses two random tiles from the board. The chosen tiles
  * are temporarily shown face up. If the tiles match, they are removed from board.
- * 
- * Play continues, matching two tiles at a time, until all tles have been matched.
- * 
+ *
+ * Play continues, matching two tiles at a time, until all tiles have been matched.
+ *
  * @author PLTW
  * @version 2.0
 */
@@ -14,16 +15,12 @@ import java.util.Scanner;
 /**
  * A game class to play concentration
  */
-public class Game
-{
+public class Game {
   private Scanner in = new Scanner(System.in);
 
   private Board board;
-  private int row1, col1;
-  private int row2, col2;
 
-  public void play()
-  {
+  public void play() {
     // instructions
     System.out.println("Welcome!");
     System.out.println("Select the tile locations you want to match,");
@@ -34,35 +31,40 @@ public class Game
 
     board = new Board();
     // play until all tiles are matched
-    while (!board.allTilesMatch())
-    {
+    while (!board.allTilesMatch()) {
       // get player's first selection, if not an integer, quit
-      row1 = -1;
-      col1 = -1;
+      int row1 = -1;
+      int col1 = -1;
       boolean validTile = false;
-      while (!validTile)
-      {
+      while (!validTile) {
         displayBoard();
         System.out.print("First choice (row col): ");
-        validTile = getTile(true); 
+        UserSelection selection = getTile();
+
+        validTile = selection.isValid();
+        row1 = selection.getRow();
+        col1 = selection.getColumn();
       }
 
       // display first tile
       board.showValue(row1, col1);
 
       // get player's second selection, if not an integer, quit
-      row2 = -1;
-      col2 = -1;
+      int row2 = -1;
+      int col2 = -1;
       validTile = false;
-      while (!validTile)
-      {
+      while (!validTile) {
         displayBoard();
         System.out.print("Second choice (row col): ");
-        validTile = getTile(false);
-         
+
+        UserSelection selection = getTile();
+
+        validTile = selection.isValid();
+        row2 = selection.getRow();
+        col2 = selection.getColumn();
+
         // check if user chosen same tile twice
-        if ((row1 == row2) && (col1 == col2))
-        {
+        if ((row1 == row2) && (col1 == col2)) {
           System.out.println("You mush choose a different second tile");
           wait(2);
           validTile = false;
@@ -77,63 +79,53 @@ public class Game
       String matched = board.checkForMatch(row1, col1, row2, col2);
       System.out.println(matched);
 
+      board.hideAll();
+
       // wait 2 seconds to start the next turn
-      wait(2); 
+      wait(2);
     }
 
     displayBoard();
+
     System.out.println("Game Over!");
   }
 
   /**
    * Get tile choices from the user, validating that
    * the choice falls within the range of rows and columns on the board.
-   * 
-   * @param firstChoice if true, saves the user's first row/col choice, otherwise sets the user's second choice
-   * @return true if user has made a valid choice, false otherwise
+   *
+   * @return UserSelection object
    */
 
-  private boolean getTile(boolean firstChoice)
-  {
-    int num1 = 0;
-    int num2 = 0;
-        
+  private UserSelection getTile() {
+    int row = 0;
+    int column = 0;
+
     if (in.hasNextInt())
-      num1 = in.nextInt();
+      row = in.nextInt();
     else
       quitGame();
-  
+
     if (in.hasNextInt())
-      num2 = in.nextInt();
-     else
+      column = in.nextInt();
+    else
       quitGame();
 
     in.reset(); // ignore any extra input
 
-    if (!board.validateSelection(num1, num2))
-    {
+    if (!board.validateSelection(row, column)) {
       System.out.print("Invalid input, please try again. ");
       wait(2);
-      return false;
+      return new UserSelection();
     }
-    if (firstChoice)   
-    {
-      row1 = num1;
-      col1 = num2;
-    }
-    else 
-    {
-      row2 = num1;
-      col2 = num2;
-    }
-    return true;
+
+    return new UserSelection(row, column);
   }
 
   /**
    * Clear the console and show the game board
    */
-  public void displayBoard()
-  {
+  public void displayBoard() {
 
     // scroll current board off screen
     for (int x = 0; x < 50; x++) {
@@ -146,20 +138,16 @@ public class Game
   /**
    * Wait n seconds before clearing the console
    */
-  private void wait(int n)
-  {
-    // a try is like an if statement, "throwing" an error if the body of the try fails
-    try
-    {
+  private void wait(int n) {
+    try {
       Thread.sleep(n * 1000);
-    } catch (InterruptedException e) { /* do nothing */ }
+    } catch (InterruptedException e) {}
   }
 
-  /** 
+  /**
    * User quits game
    */
-  private void quitGame() 
-  {
+  private void quitGame() {
     System.out.println("Quit game!");
     System.exit(0);
   }
