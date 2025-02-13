@@ -51,9 +51,13 @@ public class CardLayout extends JPanel {
                                 card.getColumn())) {
                             prevCard.isMatched();
                             card.isMatched();
-                            Timer timer = new Timer(300, new FutureListener(prevCard, card));
+                            Timer timer = new Timer(500, new FutureListener(prevCard, card));
                             timer.setRepeats(false);
                             timer.start();
+
+                            if (board.allTilesMatch()) {
+                                JOptionPane.showMessageDialog(this, "You win!");
+                            }
                         } else {
                             Timer timer = new Timer(500, new FutureListener(prevCard, card));
                             timer.setRepeats(false);

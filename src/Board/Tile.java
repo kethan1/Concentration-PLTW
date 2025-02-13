@@ -22,8 +22,6 @@ public class Tile {
   private boolean isShowing;
 
   private String value;
-  private String hidden;
-  private String matched;
 
   /**
    * Construct a tile with a string value. The default state
@@ -36,8 +34,6 @@ public class Tile {
 
     isMatched = false;
     isShowing = false;
-    hidden = "_____"; // face down value
-    matched = "  *  "; // a tile that is no longer in play
   }
 
   /**
@@ -47,15 +43,6 @@ public class Tile {
    */
   public String getValue() {
     return value;
-  }
-
-  /**
-   * Get the hidden value of this tile (face down value)
-   * 
-   * @return the hidden string
-   */
-  public String getHidden() {
-    return hidden;
   }
 
   /**
@@ -87,8 +74,6 @@ public class Tile {
    */
   public void foundMatch() {
     isMatched = true;
-    value = matched;
-    hidden = matched;
   }
 
   /**
