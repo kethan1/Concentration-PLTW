@@ -1,106 +1,59 @@
 package Board;
-/**
- * A tile in the game of Concentration
- * 
- * Tiles are arranged on an n x m board, represented in a 2D array.
- * 
- * A tile is similar to a playing card and tiles are 
- * shown in 1 of 3 states:
- *   with their value (face up)
- *   as hidden (face down)
- *   as matched (no long in play)
- * 
- * @author PLTW
- * @version 2.0
- */
 
-/**
- * A Tile class for a gameboard
- */
 public class Tile {
-  private boolean isMatched;
-  private boolean isShowing;
+    private final String value;
+    private boolean matched = false;
+    private boolean showing = false;
+    private boolean faceUp = false;
 
-  private String value;
+    public Tile(String value) {
+        this.value = value;
+    }
 
-  /**
-   * Construct a tile with a string value. The default state
-   * of a tile is hidden (face down) on the board and is unmatched.
-   * 
-   * @param value the string value of the tile (face up value)
-   */
-  public Tile(String value) {
-    this.value = value; // face up value
+    public String getValue() {
+        return value;
+    }
 
-    isMatched = false;
-    isShowing = false;
-  }
+    public void show() {
+        showing = true;
+    }
 
-  /**
-   * Get the value of this tile (face up value)
-   * 
-   * @return the value of the tile
-   */
-  public String getValue() {
-    return value;
-  }
+    public void hide() {
+        showing = false;
+    }
 
-  /**
-   * Show this tile (turn it face up)
-   */
-  public void show() {
-    isShowing = true;
-  }
+    public boolean isShowing() {
+        return showing;
+    }
 
-  /**
-   * Hide this tile (turn it face down)
-   */
-  public void hide() {
-    isShowing = false;
-  }
+    public void foundMatch() {
+        matched = true;
+    }
 
-  /**
-   * Determine if the tile is currently showing its value (face up)
-   * 
-   * @return true if the tile is showing a value, false otherwise
-   */
-  public boolean isShowingValue() {
-    return isShowing;
-  }
+    public boolean matched() {
+        return matched;
+    }
 
-  /**
-   * A matching tile to this tile has been found, set matched to true
-   * and change the way the tile is shown
-   */
-  public void foundMatch() {
-    isMatched = true;
-  }
+    public boolean isFaceUp() {
+        return faceUp;
+    }
 
-  /**
-   * Determine if this tile has been previously matched
-   * 
-   * @return true of the tile was previously matched, false otherwise
-   */
-  public boolean matched() {
-    return isMatched;
-  }
+    public void flip(boolean showFace) {
+        faceUp = showFace;
+    }
 
-  /**
-   * Determines if two tiles have the same value
-   * 
-   * @param tile the tile to compare this tile to
-   * @return true if their values are the same, false otherwise
-   */
-  public boolean equals(Tile tile) {
-    if (this.value.equals(tile.value))
-      return true;
-    return false;
-  }
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj instanceof Tile) {
+            Tile other = (Tile) obj;
+            return this.value.equals(other.value);
+        }
+        return false;
+    }
 
-  /**
-   * Return the state of this tile
-   */
-  public String toString() {
-    return value;
-  }
+    @Override
+    public String toString() {
+        return value;
+    }
 }

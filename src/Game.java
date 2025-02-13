@@ -10,20 +10,16 @@
  * @author PLTW
  * @version 2.0
 */
-import java.util.Scanner;
 import javax.swing.*;
+import com.formdev.flatlaf.FlatLightLaf;
 
 import Board.Board;
-
-import Gui.CardLayout;
-import com.formdev.flatlaf.FlatLightLaf;
+import Gui.CardPanel;
 
 /**
  * A game class to play concentration
  */
 public class Game {
-     private Scanner in = new Scanner(System.in);
-
     private Board board;
     private JFrame frame;
 
@@ -34,15 +30,12 @@ public class Game {
         } catch (UnsupportedLookAndFeelException e) {
             e.printStackTrace();
         }
-
+        
         board = new Board();
-
         frame = new JFrame("Concentration Game");
-
-        frame.getContentPane().add(new CardLayout(board));
-        frame.pack();
-        frame.setSize(500, 500);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.add(new CardPanel(board));
+        frame.setSize(500, 500);
         frame.setVisible(true);
     }
 }
