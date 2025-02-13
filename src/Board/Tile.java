@@ -1,3 +1,4 @@
+package Board;
 /**
  * A tile in the game of Concentration
  * 

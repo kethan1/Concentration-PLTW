@@ -1,36 +1,23 @@
-// For format details, see https://aka.ms/devcontainer.json. For config options, see the
-// README at: https://github.com/devcontainers/templates/tree/main/src/java
 {
-	"name": "Java w/ Desktop",
-	// Or use a Dockerfile or Docker Compose file. More info: https://containers.dev/guide/dockerfile
-	"image": "mcr.microsoft.com/devcontainers/universal:2-linux",
-
-	"features": {
-		"ghcr.io/devcontainers/features/desktop-lite:1": {}
-	},
-
-	// Use 'forwardPorts' to make a list of ports inside the container available locally.
-	"forwardPorts": [6080],
-	"portsAttributes": {
-		"6080": {
-			"label": "Desktop"
-		}
-	},
-
-	// Use 'postCreateCommand' to run commands after the container is created.
-	// "postCreateCommand": "java -version",
-
-	// Configure tool-specific properties.
-	"customizations": {
-		"vscode": {
-			"extensions": [
-				"redhat.java",
-				"vscjava.vscode-java-debug",
-				"vscjava.vscode-java-dependency"
-			]
-		}
-	}
-
-	// Uncomment to connect as root instead. More info: https://aka.ms/dev-containers-non-root.
-	// "remoteUser": "root"
+  "build": {
+    "dockerfile": "Dockerfile"
+  },
+  "features": {
+    "ghcr.io/devcontainers/features/desktop-lite:1": {}
+  },
+  "forwardPorts": [6080],
+  "portsAttributes": {
+    "6080": {
+      "label": "Desktop"
+    }
+  },
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "redhat.java",
+        "vscjava.vscode-java-debug",
+        "vscjava.vscode-java-dependency"
+      ]
+    }
+  }
 }
