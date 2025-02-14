@@ -41,6 +41,15 @@ public class Card extends JButton {
         });
     }
 
+    public void reset() {
+        setText("");
+        setBackground(Color.LIGHT_GRAY);
+        flipProgress = 1.0;
+        animatingFlip = false;
+        targetFaceUp = false;
+        textSwapped = false;
+    }
+
     public int getRow() {
         return row;
     }

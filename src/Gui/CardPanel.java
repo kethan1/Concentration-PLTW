@@ -9,25 +9,49 @@ import Board.Board;
 
 public class CardPanel extends JPanel {
     private Board board;
-    // Store Card views in a 2D array so we can easily update them.
     private Card[][] cardViews;
+    
+    private JLabel timerLabel;
+    private JLabel bestTimeLabel;
+    private Timer gameTimer;
+    private int elapsedTime;
+    private static int bestTime = Integer.MAX_VALUE;
 
     public CardPanel(Board board) {
         this.board = board;
         int rows = board.getRows();
         int cols = board.getColumns();
-        setLayout(new GridLayout(rows, cols, 10, 10));
+        
+        setLayout(new BorderLayout(10, 10));
         setBorder(new EmptyBorder(10, 10, 10, 10));
-
+        
+        JPanel infoPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 5));
+        timerLabel = new JLabel("Time: 0 sec");
+        bestTimeLabel = new JLabel("Best Time: " + (bestTime == Integer.MAX_VALUE ? "N/A" : bestTime + " sec"));
+        infoPanel.add(timerLabel);
+        infoPanel.add(bestTimeLabel);
+        add(infoPanel, BorderLayout.NORTH);
+        
+        JPanel gridPanel = new JPanel(new GridLayout(rows, cols, 10, 10));
         cardViews = new Card[rows][cols];
-        // Create a Card for each Tile on the board.
         for (int row = 0; row < rows; row++) {
             for (int col = 0; col < cols; col++) {
                 Card card = new Card(board, row, col, this::cardClicked);
                 cardViews[row][col] = card;
-                add(card);
+                gridPanel.add(card);
             }
         }
+        add(gridPanel, BorderLayout.CENTER);
+        
+        elapsedTime = 0;
+        gameTimer = new Timer(1000, new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                elapsedTime++;
+                timerLabel.setText("Time: " + elapsedTime + " sec");
+            }
+        });
+        gameTimer.start();
     }
 
     private void cardClicked(Card card) {
@@ -44,7 +68,25 @@ public class CardPanel extends JPanel {
                 cardViews[result.secondRow][result.secondCol].markMatched();
 
                 if (board.allTilesMatched()) {
-                    JOptionPane.showMessageDialog(this, "You win!");
+                    gameTimer.stop();
+                    if (elapsedTime < bestTime) {
+                        bestTime = elapsedTime;
+                        bestTimeLabel.setText("Best Time: " + bestTime + " sec");
+                    }
+
+                    int option = JOptionPane.showOptionDialog(
+                        this,
+                        "You win!\nPlay again?",
+                        "Game Over",
+                        JOptionPane.YES_NO_OPTION,
+                        JOptionPane.INFORMATION_MESSAGE,
+                        null,
+                        null,
+                        null
+                    );
+                    if (option == JOptionPane.YES_OPTION) {
+                        playAgain();
+                    }
                 }
                 break;
             case NO_MATCH:
@@ -60,5 +102,21 @@ public class CardPanel extends JPanel {
                 timer.start();
                 break;
         }
+    }
+    
+    private void playAgain() {
+        board.reset(); 
+        
+        int rows = board.getRows();
+        int cols = board.getColumns();
+        for (int row = 0; row < rows; row++) {
+            for (int col = 0; col < cols; col++) {
+                cardViews[row][col].reset();
+            }
+        }
+        
+        elapsedTime = 0;
+        timerLabel.setText("Time: " + elapsedTime + " sec");
+        gameTimer.restart();
     }
 }

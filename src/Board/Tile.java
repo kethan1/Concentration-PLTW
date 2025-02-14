@@ -1,13 +1,20 @@
 package Board;
 
 public class Tile {
-    private final String value;
+    private String value;
     private boolean matched = false;
     private boolean showing = false;
     private boolean faceUp = false;
 
     public Tile(String value) {
         this.value = value;
+    }
+
+    public void reset(String value) {
+        this.value = value;
+        matched = false;
+        showing = false;
+        faceUp = false;
     }
 
     public String getValue() {

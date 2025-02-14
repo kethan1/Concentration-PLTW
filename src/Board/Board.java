@@ -46,6 +46,11 @@ public class Board {
         if (rows * cols != TILE_VALUES.length || TILE_VALUES.length % 2 != 0) {
             throw new IllegalArgumentException("Invalid board dimensions or tile values.");
         }
+        
+        initializeBoard(rows, cols);
+    }
+
+    public void initializeBoard(int rows, int cols) {
         tiles = new Tile[rows][cols];
 
         List<String> values = new ArrayList<>(Arrays.asList(TILE_VALUES));
@@ -54,6 +59,17 @@ public class Board {
         for (int row = 0; row < rows; row++) {
             for (int col = 0; col < cols; col++) {
                 tiles[row][col] = new Tile(values.get(index++));
+            }
+        }
+    }
+
+    public void reset() {
+        List<String> values = new ArrayList<>(Arrays.asList(TILE_VALUES));
+        Collections.shuffle(values);
+        int index = 0;
+        for (Tile[] row : tiles) {
+            for (Tile tile : row) {
+                tile.reset(values.get(index++));
             }
         }
     }
